@@ -14,7 +14,7 @@ server ip_port: `147.45.51.15:1080`
 
 free port on client for socks5-proxy: `49176`
 
-binary executable file (this app): `goss`
+[binary executable file](https://github.com/prolapser/goss/releases) (this app): `goss`
 
 command:
 ```sh
