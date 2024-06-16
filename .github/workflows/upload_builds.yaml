@@ -17,19 +17,19 @@ jobs:
       
       - name: Build for Linux
         run: |
-          GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build -ldflags '-w -s -buildid=' -o bin/goss-linux
-          tar -czvf bin/goss-linux.tar -C bin goss-linux
+          GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build -ldflags '-w -s -buildid=' -o bin/goss
+          tar -czvf bin/goss.tar -C bin goss
       
       - name: Build for Windows
         run: |
-          GOARCH=amd64 GOOS=windows CGO_ENABLED=0 go build -ldflags '-w -s -buildid=' -o bin/goss-win64.exe
-          zip -j bin/goss-win64.zip bin/goss-win64.exe
+          GOARCH=amd64 GOOS=windows CGO_ENABLED=0 go build -ldflags '-w -s -buildid=' -o bin/goss.exe
+          zip -j bin/goss-win64.zip bin/goss.exe
       
       - name: Upload Linux binary as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: goss-linux.tar
-          path: bin/goss-linux.tar
+          name: goss.tar
+          path: bin/goss.tar
       
       - name: Upload Windows binary as artifact
         uses: actions/upload-artifact@v2
@@ -55,7 +55,7 @@ jobs:
       - name: Download Linux binary
         uses: actions/download-artifact@v2
         with:
-          name: goss-linux.tar
+          name: goss.tar
           path: bin
       
       - name: Download Windows binary
@@ -70,8 +70,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/goss-linux.tar
-          asset_name: goss-linux.tar
+          asset_path: ./bin/goss.tar
+          asset_name: goss.tar
           asset_content_type: application/gzip
       
       - name: Upload Windows binary to Release
