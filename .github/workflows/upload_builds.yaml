@@ -18,24 +18,24 @@ jobs:
       - name: Build for Linux
         run: |
           GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build -ldflags '-w -s -buildid=' -o bin/goss
-          tar -czvf bin/goss.tar -C bin goss
+          tar -czvf bin/goss_linux.tar -C bin goss
       
       - name: Build for Windows
         run: |
           GOARCH=amd64 GOOS=windows CGO_ENABLED=0 go build -ldflags '-w -s -buildid=' -o bin/goss.exe
-          zip -j bin/goss-win64.zip bin/goss.exe
+          zip -j bin/goss_windows.zip bin/goss.exe
       
       - name: Upload Linux binary as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: goss.tar
-          path: bin/goss.tar
+          name: goss_linux.tar
+          path: bin/goss_linux.tar
       
       - name: Upload Windows binary as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: goss-win64.zip
-          path: bin/goss-win64.zip
+          name: goss_windows.zip
+          path: bin/goss_windows.zip
 
   release:
     needs: build
@@ -55,13 +55,13 @@ jobs:
       - name: Download Linux binary
         uses: actions/download-artifact@v2
         with:
-          name: goss.tar
+          name: goss_linux.tar
           path: bin
       
       - name: Download Windows binary
         uses: actions/download-artifact@v2
         with:
-          name: goss-win64.zip
+          name: goss_windows.zip
           path: bin
       
       - name: Upload Linux binary to Release
@@ -70,8 +70,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/goss.tar
-          asset_name: goss.tar
+          asset_path: ./bin/goss_linux.tar
+          asset_name: goss_linux.tar
           asset_content_type: application/gzip
       
       - name: Upload Windows binary to Release
@@ -80,6 +80,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/goss-win64.zip
-          asset_name: goss-win64.zip
+          asset_path: ./bin/goss_windows.zip
+          asset_name: goss_windows.zip
           asset_content_type: application/zip
